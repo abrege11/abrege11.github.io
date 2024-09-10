@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <meta name="keywords" content="Quantum, Alogrithms, Deutsch">
+        <meta name="author" content="Abraham Brege">
+        <title>QAE - Deutsch's algorithm</title>
+        <link rel="stylesheet" href="../../styles/deutsch.styles.css">
+    </head>
+    <body>
+        <span id="deutsch">
+        <a href="../index.html"><h2>Deutsch's algorithm</h2></a>
+        </span>
+        [<a href="../index.html">\( \leftarrow \) back to home</a>]
+        [<a href="#deutsch-jozsa">skip to deutsch-jozsa</a>]
+        <p>Deutsch's algorithm is a function \( f(x) \) that takes in either 0 or 1, and determines whether it is <button id="constant-open">constant</button> or <button id="balanced-open">balanced</button>.</p>
+        <p>Formally, this is written as</p>
+        \[ f :\{0,1\} \longrightarrow \{0,1\} \]
+        <p>A constant function is a function that returns the same output no matter the input</p>
+        <p>\( f(0) = 0 \quad \quad f(x) = x \)</p>
+        <p>\( f(1) = 0 \quad \quad f(y) = x \)</p>
+        <p>\( f(0) = f(1) \)</p>
+        <br>
+        <p>A balanced function is a function that returns different outputs given different inputs</p>
+        <p>\( f(0) = 0 \quad \quad f(x) = x \)</p>
+        <p>\( f(1) = 1 \quad \quad f(y) = y \)</p>
+        <p>\( f(0) \ne f(1) \)</p>
+        <br>
+        <p>Using any <button id="classical-algorithm-open">classical algorithm</button>, to know if \(f(x) = f(y)\), you need to evaluate the function \(f\) for \(x\) and \(y\).</p>
+        <!-- <div class="classical-algorithm-style" id="classical-algorithm-modal-container">
+            <div class="classical-algorithm-modal">
+                <h1>Classical Algorithms</h1>
+                <button id ="classical-algorithm-close">Go back</button>
+            </div>
+        </div> -->
+        <p>Using Deutsch's <button id="quantum-algorithm-open">quantum algorithm</button>, we only have to evaluate the function \(f\) once.</p>
+        <br>
+        <p>Taking a look at Deutsch's <button id="quantum-circuit-open">quantum circuit diagram</button>:</p>
+        <br>
+        <img src="../../../assets/deutsch.png">
+        <p>
+        Deutsch's algorithm takes in two <button id="kets-open">kets \(|0\rangle\) and \(|1\rangle\)</button>. We'll use \( |\Psi_x\rangle \)
+        to take a look at the different states our kets are in throughout the algorithm.
+        </p>
+        <p>
+        \( |\Psi_1\rangle \): <br>&emsp; Our ket at this time is <button id="multi-ket-open">\(|01\rangle\)</button>.
+        Both \(|0\rangle\) and \(|1\rangle\) are being sent into \(H\) (<button id="hadamarad-open">Hadamarad</button>) gates. Hadamarad
+        gates put the given qubit into a superposition state.
+        </p>
+        <p>
+        \( |\Psi_2\rangle \): <br>&emsp; The <button id="superposition-open">superposition</button> state of \(|0\rangle\) is
+        \[ \frac{|\ket{0} + \ket{1}|}{\sqrt{2}} \]
+        &emsp;and \(|1\rangle\) is 
+        \[ \frac{|\ket{0} - \ket{1}|}{\sqrt{2}} \]
+        &emsp;Both of these states can be rewritten as <button id="plus-minus-ket-open">\(|+\rangle\) and \(|-\rangle\)</button>, respectively, which we can refer to as \(|+-\rangle\)<br>
+        &emsp;We can then rewrite the \(|+\rangle\) as \[ \frac{\left( \ket{0} + \ket{1} \right)}{\sqrt{2}} \] &emsp; so, \(|+-\rangle\) is now represented as
+        \[ \frac{\left( \ket{0} + \ket{1} \right) \ket{-}}{\sqrt{2}} \] &emsp; Furthermore, we can distribute \(|-\rangle\) into to \(|+\rangle\) obtain
+        \[ \frac{\left( \ket{0} \ket{-} + \ket{1} \ket{-} \right)}{\sqrt{2}} \]
+        </p>
+        <p>
+        \( |\Psi_3\rangle \): <br>&emsp; We then apply our <button id="quantum-oracle-open">quantum oracle \( U_f \)</button> to get
+        \[ \frac{\left(U_f \ket{0} \ket{-} + U_f \ket{1} \ket{-} \right)}{\sqrt{2}}  \] &emsp;
+        These states are in <button id="phase-oracle-open">phase oracle</button> form, so given
+        \[ U_f \ket{x} \ket{-} = (-1)^{f(x)} \ket{x} \ket{-} \]&emsp;
+        Where \( \ket{x} = \ket{0} \) or \( \ket{1} \), we get
+        \[ \frac{(-1)^{f(0)} \ket{0} \ket{-} + (-1)^{f(1)} \ket{1} \ket{-}}{\sqrt{2}} \]&emsp;
+        Furthermore, we can factor \( \ket {-} \) out for now and just focus on what is inside the parentheses<br>&emsp;
+        \[ 
+        \left( \frac{(-1)^{f(0)} \ket{0} + (-1)^{f(1)} \ket{1} }{\sqrt{2}} \right) \ket{-} 
+        \longrightarrow 
+        \frac{(-1)^{f(0)} \ket{0} + (-1)^{f(1)} \ket{1} }{\sqrt{2}} 
+        \]&emsp;
+        Now, our outputs depend on whether our function is constant, or balanced.<br><br>&emsp;
+        If \( f(x) \) is constant, \( f(0) = f(1) \), we get two options:<br><br>&emsp;
+        \( f(x) = 1 \):
+        \[ 
+        \frac{(-1)^1 \ket{0}  + (-1)^1 \ket{1}}{\sqrt{2}} 
+        \longrightarrow
+        \frac{- \ket{0} + -\ket{1}}{\sqrt{2}}
+        \longrightarrow
+        -\left(\frac{ \ket{0} + \ket{1} }{\sqrt{2}} \right)
+        \] &emsp;
+        and <br><br>&emsp;
+        \( f(x) = 0 \):
+        \[ 
+        \frac{(-1)^0 \ket{0}  + (-1)^0 \ket{1}}{\sqrt{2}} 
+        \longrightarrow
+        \frac{(1)\ket{0} + (1)\ket{1}}{\sqrt{2}}
+        \longrightarrow
+        \frac{ \ket{0} + \ket{1} }{\sqrt{2}}
+        \] &emsp;
+        We can simplify this answer,
+        \[ 
+        \left[ \frac{ \ket{0} + \ket{1} }{\sqrt{2}}, -\frac{ \ket{0} + \ket{1} }{\sqrt{2}} \right]
+        \longrightarrow
+        \pm\left(\frac{ \ket{0} + \ket{1} }{\sqrt{2}} \right)
+        \]&emsp;
+        giving<br><br>&emsp;
+        \( f(0) = f(1) \):
+        \[
+        \pm\left(\frac{ \ket{0} + \ket{1} }{\sqrt{2}} \right)
+        \]
+        <br><br>&emsp;
+        If \( f(x) \) is balanced, \( f(1) \ne f(0) \), we get two options:
+        <br><br>&emsp;
+        \( f(0) = 0, \) &ensp;\( f(1) = 1 \):
+        \[ 
+        \frac{(-1)^0 \ket{0}  + (-1)^1 \ket{1}}{\sqrt{2}} 
+        \longrightarrow
+        \frac{(1)\ket{0} -\ket{1}}{\sqrt{2}}
+        \longrightarrow
+        \frac{\ket{0} -\ket{1}}{\sqrt{2}}
+        \] &emsp;
+        and <br><br>&emsp;
+        \( f(0) = 1, \)&ensp; \( f(1) = 0 \):
+        \[ 
+        \frac{(-1)^1 \ket{0}  + (-1)^0 \ket{1}}{\sqrt{2}} 
+        \longrightarrow
+        \frac{-\ket{0} + (1)\ket{1}}{\sqrt{2}}
+        \longrightarrow
+        \frac{ -\ket{0} + \ket{1} }{\sqrt{2}}
+        \longrightarrow
+        -\left( \frac{ \ket{0} - \ket{1} }{\sqrt{2}} \right)
+        \] &emsp;
+        We can simplify this answer,
+        \[ 
+        \left[ \frac{ \ket{0} - \ket{1} }{\sqrt{2}}, -\frac{ \ket{0} - \ket{1} }{\sqrt{2}} \right]
+        \longrightarrow
+        \pm\left(\frac{ \ket{0} - \ket{1} }{\sqrt{2}} \right)
+        \]&emsp;
+        giving<br><br>&emsp;
+        \( f(0) \ne f(1) \):
+        \[
+        \pm\left(\frac{ \ket{0} - \ket{1} }{\sqrt{2}} \right)
+        \]<br>
+        </p>
+        <p>
+        &emsp;
+        <b>As of now, our states are:<br><br>&emsp;
+        \( f(0) = f(1) \):
+        \[
+        \pm\left(\frac{ \ket{0} + \ket{1} }{\sqrt{2}} \right)
+        \]&emsp;
+        and <br><br>&emsp;
+        \( f(0) \ne f(1) \):
+        \[
+        \pm\left(\frac{ \ket{0} - \ket{1} }{\sqrt{2}} \right)
+        \]
+        </b><br>&emsp;
+        Notice that our two states are equal to \( \ket{+} \) and \(\ket{-} \):
+        \[
+        \pm
+        \left[
+        \frac{ \ket{0} + \ket{1} }{\sqrt{2}},
+        \vphantom{\frac{ \ket{0} + \ket{1} }{\sqrt{2}}}
+        \frac{ \ket{0} - \ket{1} }{\sqrt{2}}
+        \right]
+        \longrightarrow
+        \pm \left[
+        \vphantom{\frac{ \ket{0} + \ket{1} }{\sqrt{2}}}
+        \ket{+},
+        \vphantom{\frac{ \ket{0} + \ket{1} }{\sqrt{2}}}
+        \ket{-}
+        \right]
+        \]&emsp;
+        </p>
+        <p>
+        \( |\Psi_4\rangle \): <br>&emsp; We then send the top qubit through a \( H \)adamarad gate. <br><br>&emsp;
+        If \( f(0) = f(1) \):
+        \[
+        \pm \ket{+}
+        \longrightarrow
+        \pm \ket{0}
+        \]&emsp;
+        and<br><br>&emsp;
+        If \( f(0) \ne f(1) \):
+        \[
+        \pm \ket{-}
+        \longrightarrow
+        \pm \ket{1}
+        \]&emsp;
+        </p>
+        <p>
+        This leaves us with:
+        \[
+        \pm
+        \left[
+        \vphantom{\frac{ \ket{0} + \ket{1} }{\sqrt{2}}}
+        \ket{0},
+        \ket{1}
+        \right]
+        \]
+        <br>
+        <b>Therefore, <br>&emsp;
+        If \( \ket{0} \) is measured, the function is constant, \( f(0) = f(1) \) <br>&emsp;
+        and if \( \ket{1} \) is measured, the function is balanced, \( f(0) \ne f(1) \)
+        </b>
+        <br><br>
+        Deutsch's algorithm proves <button id="quantum-supremacy-open">quantum supremacy</button>.<br> 
+        It performs an operation that would take 2 measurments in <button id="classical-computation-open">classical computation</button>, and gets the same output with only 1 measurement using <button id="quantum-computation-open">quantum computation</button>.
+        </p><br><br><br><br>
+        <span id="deutsch-jozsa">
+        <a href="javascript:history.back()"><h2>Deutsch-Jozsa algorithm</h2></a>
+        </span>
+        <p>[<a href="../index.html">\( \leftarrow \) back to home</a>]</p>
+        <p>
+        Deutsch-Jozsa's algorithm, similar to <a href="#deutsch">Deutsch's algorithm</a>, determines whether a function \( f \) is constant, or balanced. <br><br>
+        However, unlike Deutsch's algorithm, Deutsch Jozsa's algorithm can take in an amount \( n \) of <button id="qubits-open">qubits</button>. Formally, this is represented as 
+        </p>
+        \[ f :\{0,1\}^n \longrightarrow \{0,1\} \]
+        <p>Using any <button id="jozsa-classical-algorithm-open">classical algorithm</button>, in the worst case scenario, you would have to evaluate the function \( 2^{n-1} + 1 \) times.</p>
+        <p>Using Deutsch-Jozsa's <button id="jozsa-quantum-algorithm-open">quantum algorithm</button>, we only have to evaluate the function \(f\) once.</p> 
+        <p><b>Why \( 2^{n-1} + 1 \) ?</b></p>
+        <p>\( 2^{n-1} \) refers to half of n, as \( 2^5 = 32 \), \( 2^4 = 16 \), \( 2^3 = 8 \), and so on.</p>
+        <p>The +1 can be explained by a short example</p>
+        <p>
+        When \( n=5 \)<br>&emsp;
+        In the worst case, no matter if \( f \) is constant or balanced, the first \( 2^{n-1} \) (or \( 16 \) in this case) evaluations could be all \( \ket{0} \)'s or \( \ket{1} \)'s. Lets say we get all \( \ket{0} \)'s <br>&emsp;
+        Thus, the \( +1 \) refers to the need for us to evaluate once more to see if we get another \( \ket{0} \), meaning\( f \) is constant, or \( \ket{1} \), meaning \( f \) is balanced.
+        </p>
+        <p>Let's take a look at the <button id="jozsa-quantum-circuit-open">circuit diagram.</button></p>
+        <img src="../../../assets/deutsch-jozsa.png">
+        <p>
+        Notice, the <button id="jozsa-symbols-open">symbols</button>
+        \[ \ket{0}^{\otimes n} \]
+        \[ /^n \]
+        \[ H^{\otimes n} \]
+        Referring to \( n \) amounts of \( \ket{0} \)'s, qubits (represented by lines), and <button id="jozsa-hadamarad-open">\( H \) gates</button>, respectively.
+        </p>
+        <p>
+        \( |\Psi_1\rangle \): <br>&emsp;
+        Our ket at this time is \( n \) amounts of \( \ket{0} \)'s and one \( \ket{1} \), which we can represent as \( \ket{0}^{\otimes n} \ket{1} \)
+        </p>
+        <p>
+        \( |\Psi_2\rangle \): <br>&emsp;
+        Our qubits are run through \( H \) gates which put them into a <button id="jozsa-superposition-open">superposition</button> state<br>&emsp;
+        Our ket is now \( n \) amounts of \( \ket{+} \)'s and one \( \ket{-} \), which we can represent as 
+        \[
+        \ket{+}^{\otimes n} \ket{-}
+        \]&emsp;
+        Let's focus on our state \( \ket{+}^{\otimes n} \), we can redefine this as 
+        \[  
+        \ket{+}^{\otimes n}
+        \longrightarrow
+        \left( \frac{ \ket{0} + \ket{1} }{\sqrt{2}} \right)^{\otimes n}
+        \longrightarrow
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg) ^{\otimes n}
+        \] &emsp;
+        Lets say that \( n=2 \), in this case, we can expand this state,
+        \[
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg) \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg)
+        \longrightarrow
+        \frac{1}{\sqrt{2^2}} \Bigg( \ket{00} + \ket{01} + \ket{10} + \ket{11} \Bigg)
+        \] &emsp;
+        Similarly, lets say \( n=3 \)
+        \[
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg) \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg)\frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg)
+        \longrightarrow
+        \frac{1}{\sqrt{2^3}} \Bigg( \ket{000} + \ket{001} + \ket{010} + \ket{011} + \ket{100} + \ket{101} + \ket{110} + \ket{111} \Bigg)
+        \]&emsp;
+        This can be represented as
+        <button id="summation-open">
+        \[
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} \ket{x}
+        \] </button><br>&emsp;
+        Now, looking back at our full state 
+        \[
+        \ket{+}^{\otimes n} \ket{-}  
+        \]&emsp;
+        We can represent this as
+        \[ 
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} \ket{x} \ket{-}
+        \] &emsp;
+        </p>
+        <p>
+        \( |\Psi_3\rangle \): <br> &emsp;
+        Looking back at our diagram, <br>
+        <img src="../../../assets/deutsch-jozsa.png"><br>&emsp;
+        our state
+        \[ 
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} \ket{x} \ket{-}
+        \] &emsp;
+        is ran through our <button id="jozsa-quantum-oracle-open">quantum oracle \( U_f \)</button>
+        \[ 
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} \ket{x} \ket{-} 
+        \longrightarrow
+        U_f\frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} \ket{x} \ket{-}
+        \longrightarrow
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} U_f \ket{x} \ket{-}   
+        \] &emsp;
+        Recall
+        \[ U_f \ket{x} \ket{-} = (-1)^{f(x)} \ket{x} \ket{-} \]&emsp;
+        So,
+        \[
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} U_f \ket{x} \ket{-}
+        \longrightarrow
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} (-1)^{f(x)} \ket{x} \ket{-}
+        \] &emsp;
+        Again, we can factor \( \ket{-} \) out.
+        </p>
+        <p>
+        \( |\Psi_4\rangle \): <br>&emsp;
+        We now run each of our \( \ket{+} \)'s through \( H \) gates
+        \[
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} (-1)^{f(x)} \ket{x}
+        \longrightarrow
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} (-1)^{f(x)} H^{\otimes n} \ket{x}
+        \] &emsp;
+        Now we can look back at our Hadamarad transform for \( \ket{+}^{\otimes n}  \) and apply \( (-1)^{f(x)} \)
+        \[
+        \ket{+}^{\otimes n} 
+        \longrightarrow
+        (-1)^{f(x)}\ket{+}^{\otimes n}
+        \] &emsp;
+        Recall,
+        \[
+        \ket{+}
+        \longrightarrow
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg)
+        \]&emsp;
+        So \[ (-1)^{f(x)}\ket{+}^{\otimes n} \]&emsp; can be represented by
+        \[
+        (-1)^{f(x)} \left( \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg) \right)
+        \]&emsp;
+        Which we can rewrite as
+        \[
+        H\ket{x_n} = \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_n}\ket{1}\Bigg)
+        \]&emsp;
+        This leaves us with two options <br><br>&emsp;
+        \( x=0 \)
+        \[
+        H\ket{0} = \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^0\ket{1}\Bigg)
+        \] &emsp;
+        Which gives us the \( \ket{+} \), or
+        \[
+        \left( \frac{ \ket{0} + \ket{1} }{\sqrt{2}} \right)
+        \]
+        </p>
+        &emsp; and
+        <br><br>&emsp;
+        \( x=1 \)
+        \[
+        H\ket{1} = \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^1\ket{1}\Bigg)
+        \] &emsp;
+        Which gives us the \( \ket{-} \), or
+        \[
+        \left( \frac{ \ket{0} - \ket{1} }{\sqrt{2}} \right)
+        \] &emsp;
+        Remembering when \( n=3 \), we can rewrite this state as
+        \[
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + \ket{1}\Bigg)
+        \]
+        \[
+        \longrightarrow
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_0}\ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_1}\ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_2}\ket{1}\Bigg)
+        \]&emsp;
+        so,
+        \[
+        \frac{1}{\sqrt{2^3}} \Bigg( \ket{000} + \ket{001} + \ket{010} + \ket{011} 
+        + \ket{100} + \ket{101} + \ket{110} + \ket{111} \Bigg)
+        \]
+        \[
+        \longrightarrow
+        \frac{1}{\sqrt{2^3}} \Bigg( \ket{000} + (-1)^{x_2}\ket{001} + (-1)^{x_1}\ket{010} + (-1)^{x_1 + x_2}\ket{011} \; + 
+        \]
+        \[
+        (-1)^{x_0}\ket{100} + (-1)^{x_0+x_2}\ket{101} + (-1)^{x_0+x_1}\ket{110} + (-1)^{x_0+x_1+x_2}\ket{111} \Bigg)
+        \]&emsp;
+        A lot at first glance, but notice 
+        \[
+        \ket{001}
+        \longrightarrow
+        \]
+        \[
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_0(0)}\ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_1(0)}\ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_2(1)}\ket{1}\Bigg)
+        \longrightarrow
+        \]
+        \[
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_2}\ket{1}\Bigg)
+        \longrightarrow
+        \]
+        \[
+        (-1)^{x_2} 
+        \longrightarrow
+        \]
+        \[
+        (-1)^{x_2} \ket{001}
+        \] &emsp;
+        Similarly,
+        \[
+        \ket{011}
+        \longrightarrow
+        \]
+        \[
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_0(0)}\ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_1(1)}\ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_2(1)}\ket{1}\Bigg)
+        \longrightarrow
+        \]
+        \[
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_1}\ket{1}\Bigg)
+        \frac{1}{\sqrt{2}} \Bigg(\ket{0} + (-1)^{x_2}\ket{1}\Bigg)
+        \longrightarrow
+        \]
+        \[
+        (-1)^{x_1 + x_2} 
+        \longrightarrow
+        \]
+        \[
+        (-1)^{x_1 + x_2} \ket{011}
+        \] &emsp;
+        Which we can express as
+        \[
+        H^{\otimes n} \ket{x} = \frac{1}{\sqrt{2^n}} \sum_{z \in \{ 0,1 \}^n} (-1)^{x \cdot z} \ket{z}
+        \] &emsp;
+        Notice that the \( x \cdot z \) in, \((-1)^{x \cdot z}\) is referring to being <button id="dotted-open">dotted</button> with z.
+        <br><br>&emsp;
+        Now that we can define \( H^{\otimes n} \ket{x} \), looking back at the start of \( |\Psi_4\rangle \)
+        \[
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} (-1)^{f(x)} H^{\otimes n} \ket{x}
+        \] &emsp;
+        We can replace \( H^{\otimes n} \ket{x} \) with our new definition
+        \[
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} (-1)^{f(x)} 
+        \frac{1}{\sqrt{2^n}} \sum_{z \in \{0,1\}^n} (-1)^{x \cdot z} \ket{z}
+        \] &emsp;
+        This isn't in its most readable form, lets express this differently
+        \[
+        \sum_{x \in \{0,1\}^n} \sum_{z \in \{0,1\}^n} \frac{1}{2^n} (-1)^{f(x) + x \cdot z} \ket{z} 
+        \] &emsp;
+        </p>
+        &emsp;
+        <b>Now lets look at what out measurements will tell us.</b><br><br>&emsp;
+        When \( z = \ket{0}^{\otimes n} \), our state becomes
+        \[
+        \sum_{x \in \{0,1\}^n} \sum_{z \in \{0,1\}^n} \frac{1}{2^n} (-1)^{f(x) + x \cdot \ket{0}^{\otimes n}} \ket{z} 
+        \] &emsp;
+        Which simplifies to
+        \[
+        \sum_{x \in \{0,1\}^n} \frac{1}{2^n} (-1)^{f(x)}
+        \] &emsp;
+        Now, we have two options, <br><br>&emsp;
+        \( f(x) = 0 \) 
+        \[
+        \sum_{x \in \{0,1\}^n} \frac{1}{2^n} (-1)^0
+        \longrightarrow
+        \frac{1}{2^n} \sum_{x \in \{0,1\}^n} 1
+        \] &emsp;
+        In this case, notice that \(\sum_{x \in \{0,1\}^n} 1\) is equal \( (1 + 1 + 1..) \) \( n \) times. So it can be represented as \( 2^n \)<br><br>&emsp;
+        Now, lets rewrite our state with our new expression,
+        \[
+        \frac{1}{2^n} 2^n
+        \] &emsp;
+        <b>Which will become 1.</b><br><br>&emsp;
+        Similarly, when <br><br>&emsp;
+        \( f(x) = 1 \) <br><br>&emsp;
+        We see that the steps are repeated, except instead of our \( (-1) \) being raised to the \( 0 \) it's raised to the \( 1 \).
+        \[
+        \sum_{x \in \{0,1\}^n} \frac{1}{2^n} (-1)^1
+        \longrightarrow
+        \frac{1}{2^n} \sum_{x \in \{0,1\}^n} -1
+        \longrightarrow
+        \frac{1}{2^n} (-2^n)
+        \longrightarrow
+        -\frac{2^n}{2^n}
+        \longrightarrow
+        -1
+        \] &emsp;
+        <b>This causes our output to be \(-1\)</b> <br><br><br>&emsp;
+        This means that <b>when \( f \) is constant, the <button id="amplitude-open">amplitude</button> of our state \(\ket{0}^{\otimes n} \) is \( \pm 1 \) </b> <br><br><br>&emsp;
+        If \( f \) is balanced, we see some similarities, currently we have,
+        \[
+        \sum_{x \in \{0,1\}^n} \frac{1}{2^n} (-1)^f(x)
+        \] &emsp;
+        Recall, a balanced function is a function in which 0 appears as frequently as 1, 
+        \[
+        (-1)^0 + (-1)^1 + (-1)^0 + (-1)^1 + (-1)^0 + (-1)^1..
+        \longrightarrow
+
+        \]
+        \[
+        1 - 1 + 1 - 1 + 1 - 1.. = 0
+        \] &emsp;
+        As we see, an infinite string of alternating \( \pm 1 \)'s will always leave us with 0. <br><br>&emsp;
+        This will leave us with 
+        \[
+        \frac{1}{2^n} (0) = 0
+        \] &emsp;
+        This means that <b>when \( f \) is balanced, the amplitude of our state \(\ket{0}^{\otimes n} \) is \( 0 \) </b> <br><br><br>&emsp;
+        </p>
+        <p>
+        <b>What does this mean?</b><br><br>
+        If \( f \) is constant, our amplitude is \( \pm 1 \)<br>
+        If \( f \) is balanced, our amplitude is \( 0 \) <br><br>
+        
+        Amplitudes are probabilities, so this means we will only ever measure \( f \) as constant given the state \( \ket{0}^{\otimes n} \), and if we measure any other state, \( f \) will be balanced. <br><br>
+        In short, if we get a stream of all \( \ket{0} \)'s, we will always measure \( f \) to be constant 100% of the time. If we get even a singular \( \ket{1} \), \( f \) is balanced.
+        </p>
+        <br><br><br><br>
+        [<a href="../index.html">\( \leftarrow \) back to home</a>]
+        <br><br><br><br>
+        <script src="../../utils/deutsch-modal.utils.js"></script>
+        <script src="../../utils/deutsch-jozsa-modal.utils.js"></script>
+    </body>
+</html>

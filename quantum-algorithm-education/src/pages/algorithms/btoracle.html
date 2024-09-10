@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <meta name="keywords" content="">
+        <meta name="author" content="Abraham Brege">
+        <title>QAE - Beyond the oracle</title>
+        <link rel="stylesheet" href="../../styles/btoracle.styles.css">
+    </head>
+    <body>
+        <a href="javascript:history.back()"><h2>Beyond the oracle</h2></a>
+        [<a href="../index.html">\( \leftarrow \) back to home</a>] <br><br>
+        <p>
+        We are at a point where the oracle method of quantum computation is quite limiting. 
+        You've most likely noticed a pattern in our computation using these quantum oracles. <br><br>
+        While these algorithms are an amazing introduction to the complications of quantum algorithms, they lack 
+        applicability to real world problems. I even remember John Watrous describing the problem of one of these algoirthms, and saying something along the lines of
+        "It may be hard to even imagine where you could use this promise", and thats correct! They're abstract, however, the algorithms to come are more complicated, but they solve real world issues. <br><br>
+        Now, we can go into what you need to know.
+        </p>
+        <h3>More gates</h3>
+        <p>
+            <table>
+                <tr>
+                <th>Gate</th>
+                <th>Symbol</th>
+                <th>Matrix</th>
+                <th>Operation</th>
+                </tr>
+                <tr>
+                <td>Pauli-X</td>
+                <td><img src="../../../assets/xgate.png"></td>
+                <td><img src="../../../assets/xgate-matrix.png"></td>
+                <td>Flips the bit. Equivalent to the classic \( NOT \) gate</td>
+                </tr>
+                <tr>
+                <td>Pauli-Y</td>
+                <td><img src="../../../assets/ygate.png"></td>
+                <td><img src="../../../assets/ygate-matrix.png"></td>
+                <td>Converts \( \ket{0} \) to \( i \ket{1} \) and \( \ket{1} \) to \( -i \ket{0} \) </td>
+                </tr>
+                <tr>
+                <td>Pauli-Z</td>
+                <td><img src="../../../assets/zgate.png"></td>
+                <td><img src="../../../assets/zgate-matrix.png"></td>
+                <td>Does not act on \( \ket{0} \) and flips \( \ket{1} \) to \( - \ket{1} \)</td>
+                </tr>
+                <tr>
+                <td>Phase</td>
+                <td><img src="../../../assets/sgate.png"></td>
+                <td><img src="../../../assets/sgate-matrix.png"></td>
+                <td>Does not act on \( \ket{0} \) and converts \( \ket{1} \) to \( i \ket{1} \)</td>
+                </tr>
+                <tr>
+                <td>\( \pi / 8 \)</td>
+                <td><img src="../../../assets/tgate.png"></td>
+                <td><img src="../../../assets/tgate-matrix.png"></td>
+                <td>Making our qubit converge to 0 or 1 to give our final output value</td>
+                </tr>
+                <tr>
+                <td>Phase \(^\dagger \)</td>
+                <td><img src="../../../assets/stranspose.png"></td>
+                <td><img src="../../../assets/stranspose-matrix.png"></td>
+                <td>Inverse of \( S \)</td>
+                </tr>
+                <tr>
+                <td>\( \pi / 8 ^\dagger \)</td>
+                <td><img src="../../../assets/ttranspose.png"></td>
+                <td><img src="../../../assets/ttranspose-matrix.png"></td>
+                <td>Inverse of \( T \)</td>
+                </tr>
+                <tr>
+                <td>QFT Gate</td>
+                <td><img src="../../../assets/r.png"></td>
+                <td><img src="../../../assets/r-matrix.png"></td>
+                <td>Sends our qubit into the given state for n when inputted \( \ket{1} \)</td>
+                </tr>
+              </table>
+            </p>
+        <h3>New Circuit Diagram Items</h3>
+        <p>
+            <table>
+                <tr>
+                <th>Gate</th>
+                <th>Symbol</th>
+                <th>Operation</th>
+                </tr>
+                <tr>
+                <td>CNOT</td>
+                <td><img src="../../../assets/cnot.png"></td>
+                <td>On two bits, performs a flip on the second bit if the first bit is 1. \( \ket{01} \longrightarrow \ket{01}, \quad \ket{10} \longrightarrow \ket{11} \)</td>
+                </tr>
+                <tr>
+                <td>Swap</td>
+                <td><img src="../../../assets/swap.png"></td>
+                <td>Swaps bits </td>
+                </tr>
+              </table>
+            </p>    
+        <h3>Quantum Fourier Transform</h3>
+        The QFT is a necessity for quantum algorithms, so let's dissect it. <br><br>
+        Looking at the circuit diagram <br>
+        <img src="../../../assets/qft-breakdown.png">
+        <p>First, we can see by the matrix that the \( \ket{0} \) state is not effected by this gate, but let's look at what the \( R_n \) gate does to a qubit \( \ket{1} \)</p>
+        \[
+        R_n \ket{1} \longrightarrow e^{\frac{2 \pi i}{2^n}} \ket{1}
+        \]
+        Interestingly enough, we can rewrite our diagram to see what the outputs are <br>
+        <img src="../../../assets/qft-breakdown-answers.png"><br><br>
+        Let's take a closer look
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i [0.j_1..j_n]} \ket{1} \bigg)
+        \]
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i [0.j_2..j_n]} \ket{1} \bigg)
+        \]
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i [0.j_3..j_n]} \ket{1} \bigg)
+        \]
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i [0.j_n]} \ket{1} \bigg)
+        \]
+        As for the \( 0.x \) notation, \( x \) is just a string of binary digits, and the \( 0. \) is denoting that we are working with a binary fraction. <br><br>
+        For example, if \( x=101 \), then
+        \[
+        x = 101 \longrightarrow 
+        \]
+        \[
+        0.x = 1 \cdot 2^{-1} + 0 \cdot 2^{-2} + 1 \cdot 2^{-3} = .625
+        \]
+        So notice that our output will just be n amounts of these equations, this is what we want, and if we run through a quick example, we can see it in action. <br><br>
+        When we have x, y, and z, this is our output
+        \[
+        QFT \ket{xyz} \longrightarrow
+        \]
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{z}{2})} \ket{1} \bigg) \otimes
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{y}{2} + \frac{z}{4})} \ket{1} \bigg) \otimes
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2} + \frac{y}{4} + \frac{z}{8})} \ket{1} \bigg)
+        \]
+        So how do we get here? Let's rewrite our circuit diagram to represent our specific input, instead of the general case <br>
+        <img src="../../../assets/qft-specific-diagram.png"> <br>
+        Now, looking at \( \ket{x} \), we know that the \( H \) gate puts it into the following state
+        \[
+        H\ket{x} \longrightarrow 
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + (-1)^x \ket{1} \bigg)
+        \]
+        Since we are working with the Fourier transform, we can rewrite \( (-1)^x \) using euler's formula, this will become apparent why very shortly, it makes the representation of each gate world's easier to understand. <br><br>
+        So, 
+        \[
+        (-1)^x \longrightarrow
+        e^{2 \pi i (\frac{x}{2})}
+        \]
+        With this definition, we can rewrite
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + (-1)^x \ket{1} \bigg)
+        \longrightarrow
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2})} \ket{1} \bigg)
+        \]
+        Now, you'll notice that we rewrote \( (-1)^x \) to be equivalent to \( R_1 \), because when we run through \( R_2 \), which consults \( y \), our state becomes
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2})} \ket{1} \bigg)
+        \longrightarrow
+        \]
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2})} e^{(\frac{2 \pi i }{2^2})^y} \ket{1} \bigg)
+        \]
+        Which, due to our foresight can be rewritten as
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2})} e^{2 \pi i (\frac{y}{4})} \ket{1} \bigg)
+        \]
+        Which can be further simplified to
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2} + \frac{y}{4})} \ket{1} \bigg)
+        \]
+        And moving onto \( R_3 \) which is consulting \( z \) denoted by the wire trailing to \( \ket{z} \)'s qubit, we'll skip straight to our rewritten state
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2} + \frac{y}{4} + \frac{z}{8})} \ket{1} \bigg)
+        \]
+        Now that we have our state for \( \ket{x} \), let's look at \( \ket{y} \)
+        \[
+        H \ket{y} \longrightarrow
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + (-1)^y \ket{1} \bigg)
+        \]
+        Which again, we rewrite as
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{y}{2})} \ket{1} \bigg)
+        \]
+        And again, looking at \( R_2 \), the pattern persists, leaving us with
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{y}{2} + \frac{z}{4})} \ket{1} \bigg)
+        \]
+        And finally, our \( \ket{z} \) is simply running through an \( H \) gate,
+        \[
+        H \ket{z} \longrightarrow
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + (-1)^z \ket{1} \bigg)
+        \longrightarrow
+        \]
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{z}{2})} \ket{1} \bigg)
+        \]
+        Our state is now
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2} + \frac{y}{4} + \frac{z}{8})} \ket{1} \bigg) \otimes
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{y}{2} + \frac{z}{4})} \ket{1} \bigg) \otimes
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{z}{2})} \ket{1} \bigg) 
+        \]
+        That looks very familiar to our final state
+        \[
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{z}{2})} \ket{1} \bigg) \otimes
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{y}{2} + \frac{z}{4})} \ket{1} \bigg) \otimes
+        \frac{1}{\sqrt{2}}\bigg( \ket{0} + e^{2 \pi i (\frac{x}{2} + \frac{y}{4} + \frac{z}{8})} \ket{1} \bigg)
+        \]
+        And that comes from our swap gates at the end, in this case, they're used to reverse our final output, leaving us with the desired output state.
+        <p>This is our quantum fourier transform. This will be used in our next helper algorithm, quantum phase estimation.</p>
+        <h3>Quantum Phase Estimation</h3>
+        <p>This algorithm finds the eigenvalue of a unitary operator. What does that mean? <br><br>
+        A unitary operator is a matrix that, multiplied by inverse, is the Identity \( I \) matrix<br><br>
+        The eigenvalue is the multiplying factor of a linear transformation. What does that mean? <br><br>
+        In all honesty, it's not of much importance to understand what an eigenvalue is to understand the equation. However, 3Blue1Brown has a great <a href="https://www.youtube.com/watch?v=PFDu9oVAE-g&t=795s">video</a> on the topic. <br><br>
+        For this algorithm, just think of us looking for \( \theta \)
+        </p>
+        <p>
+        Consider our unitary matrix \( U \) has an eigenvalue \( e^{i \theta} \)
+        <br><br> This algorithm tells us how to approximate \( \theta \) with high probability of success.
+        </p>
+        <p>
+        Let's look at the circuit diagram <br>
+        <img src="../../../assets/quantum-phase-estimation-diagram.png"> <br>
+        Notice the \( QFT^{-1}_{2^n}\), is our inverse quantum fourier transform, which runs on \( 2^n \) states since each qubit can have n states of 0 or 1.<br><br>
+        Likewise, notice \( U^n \) where n is referring to the amount of times that \( U \) is applied to a qubit<br><br>
+        Here we can see that we start with the stream of qubits \(\ket{0^{\otimes n}} \ket{\phi}\), the top \( \ket{0} \) qubits are put into superposition state
+        \[
+        \ket{0^{\otimes n}} \ket{\phi}
+        \longrightarrow
+        \]
+        \[
+        \bigg(\frac{1}{\sqrt{2}} \bigg(\ket{0} + \ket{1} \bigg) 
+        \otimes \frac{1}{\sqrt{2}} \bigg(\ket{0} + \ket{1} \bigg)
+        \otimes ... \otimes 
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + \ket{1} \bigg)
+        \bigg)\ket{\phi}
+        \]
+        Now you'll see similarly to how \( R_n \) works, our \( U \) yields a similar output, let's represent our superposition state of \( \ket{0} \)'s as \( j \) 
+        \[
+        U^j\ket{j} \ket{\phi} \longrightarrow \ket{j} U^J \ket{\phi}
+        \]
+        Notice that this is now in phase kickback, so 
+        \[
+        \ket{j} U^J \ket{\phi} \longrightarrow \ket{j} e^{i \theta} \phi
+        \]
+        </p>
+        Let's see how this looks in our example, since \(2^0 = 1\), and \(U^1=U\), \(U\) is only applied once
+        \[
+        U\bigg(\frac{1}{\sqrt{2}} \bigg(\ket{0} + \ket{1} \bigg) 
+        \otimes \frac{1}{\sqrt{2}} \bigg(\ket{0} + \ket{1} \bigg)
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + \ket{1} \bigg)
+        \otimes ...
+        \bigg)\ket{\phi}
+        \]
+        This causes phase kickback, and the output in this case is \( e^{i \theta} \), we'll also forget the first string of superposition states for now
+        \[
+        \longrightarrow 
+         ...\otimes
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + e^{i\theta}\ket{1} \bigg)
+        \ket{\phi}
+        \]
+        Next, we see that \( U \) is applied twice, this goes how you think it would
+        \[
+        U^2 ...\otimes
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + e^{i\theta}\ket{1} \bigg)
+        \ket{\phi}
+        \longrightarrow
+        \]
+        \[
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + e^{i\theta}\ket{1} \bigg)
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + e^{2i\theta}\ket{1} \bigg)
+        \ket{\phi}
+        \]
+        and this pattern continues on, we can represent this as
+        \[
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + e^{2^{n-1}i\theta}\ket{1} \bigg) \otimes ... \otimes
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + e^{2i\theta}\ket{1} \bigg) \otimes
+        \frac{1}{\sqrt{2}} \bigg(\ket{0} + e^{i\theta}\ket{1} \bigg) \ket{\phi}
+        \]
+        <p>
+        So what do we do with this state? Well, notice we now have to run our qubits through the inverse quantum fourier transform.<br><br>
+        Interestingly enough, all that we've been doing up to this point is preparing a QFT state to be able to be decoded at the end of our algorithm. <br><br>
+        So, let's look back at what QFT's output on \( \ket{x} \) looks like
+        \[
+        QFT \ket{x} \longrightarrow
+        \frac{1}{\sqrt{2}} \bigg( \ket{0} + e^{\frac{2 \pi i x}{2^1}} \ket{1} \bigg) \otimes 
+        \frac{1}{\sqrt{2}} \bigg( \ket{0} + e^{\frac{2 \pi i x}{2^2}} \ket{1} \bigg) \otimes 
+        \frac{1}{\sqrt{2}} \bigg( \ket{0} + e^{\frac{2 \pi i x}{2^n}} \ket{1} \bigg)
+        \]
+        Notice these are very close, but there is a couple differentiating factors, our \( \theta \phi \), would need to be mulitplied by \( 2 \pi \) and our \( 2^n \) is actually in the denominator
+        <br><br> However, notice that our inverse QFT is run \( 2^n \) times, so we can forget about that, and just apply \( 2\pi \)
+        <br><br>Adding \( 2\pi \) is simply putting it in front of \( i \theta \), so while we do this, we'll also write our state in summation form, this is due to the fact that writing out each qubit is trivial at this point, we get the state
+        \[
+        \frac{1}{\sqrt{2}} \sum^{}_{\phi =0} {e^{2 \pi i \theta \phi } \ket {\phi}}
+        \]
+        And with this state, we can now run it through our inverse QFT
+        \[
+        QFT^{-1}_{2^n} \bigg( \frac{1}{\sqrt{2}} \sum^{}_{k=0} {e^{2 \pi i \theta \phi } \ket {\phi}} \bigg) \longrightarrow \ket{\theta}
+        \]
+        We can see that the \( QFT^{-1} \) allows us to have \( \theta \) in a state, that upon measurement, leaves us with the eigenvalue \( \theta \) <br><br>
+        We will use this in the upcoming Shor's algorithm. 
+        <br><br><br><br>
+        [<a href="../index.html">\( \leftarrow \) back to home</a>]
+        <br><br><br><br>
+    </body>
+</html>

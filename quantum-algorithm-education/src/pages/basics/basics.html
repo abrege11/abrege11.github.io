@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Abraham Brege">
+        <title>QAE - Basics</title>
+        <link rel="stylesheet" href="../../styles/basics.styles.css">
+        <script src="../../utils/latex-helper.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </head>
+    <body>
+        <a href="javascript:history.back()"><h2>Basics</h2></a>
+        [<a href="../index.html">\( \leftarrow \) back to home</a>]
+        <p>Don't know a thing about quantum computing? No worries. Follow the roadmap below to prepare yourself for the quantum algorithms ahead.</p>
+        <h3>Roadmap</h3>
+        <p>Before proceeding, due to the fact that I'm a 19 year old who is learning myself and contributes to this website on my downtime at my warehouse job, all of the material covered below is specific to the algorithms covered to allow you to quickly grasp these complex topics. To obtain a deeper understanding of these topics, it is heavily recommended to study from accredited material.</p>
+        <p>If you're familiar with a topic, skip to your level of understanding</p>
+        <p>
+        <a href="#classical-computation">Classical Computation</a>
+        \( \rightarrow \)
+        <a href="#classical-logic-gates">Classical Logic Gates</a>
+        \( \rightarrow \)
+        <a href="#function-types">Function Types</a>
+        \( \rightarrow \)
+        <a href="#mathematics">Mathematics</a>
+        \( \rightarrow \)
+        <a href="#notation">Notation</a>
+        \( \rightarrow \)
+        <a href="#quantum-computation">Quantum Computation</a>
+        \( \rightarrow \)
+        <a href="#bits-and-qubits">Bits and Qubits</a>
+        \( \rightarrow \)
+        <a href="#superposition">Superposition</a>
+        \( \rightarrow \)
+        <a href="#entanglement">Entanglement</a>
+        \( \rightarrow \)
+        <a href="#quantum-logic-gates">Quantum Gates</a>
+        \( \rightarrow \)
+        <a href="#quantum-circuit-basics">Quantum Circuits</a>  
+        \( \rightarrow \)
+        <a href="#quantum-supremacy">Quantum Supermacy</a>
+        </p>
+        <p>
+          If you are already familiar with these concepts, you can also check out the sections on <a href="#quantum-oracle">Quantum Oracle</a>'s along with <a href="#phase-oracle">Phase Oracle</a>'s<br><br>
+        </p>
+        <span id="classical-computation">
+        <h3>Classical Computation</h3>
+        <p>
+        Classical computing is a very broad topic with countless branches and subsets of the practice. We'll focus on the basics and move on. <br><br>
+        Classical computers use bits <br>
+        Bits are binary values <br>
+        Binary values are either 0 or 1 <br> <br>
+        These bits are run through logic gates to perform operations on them. These few elementary operations are the building blocks of all technology today. <br><br>
+        In all, this is a gross over-generalization of the practice. However, this is really all you need to know for our application.
+        </p> <br>
+        </span>
+        <span id="classical-logic-gates">
+        <h3>Classical Logic Gates</h3>
+        <p>
+        The gates we will cover are AND, OR, NOT, XOR, and NAND
+        <table>
+            <tr>
+            <th>Gate</th>
+            <th>Circuit</th>
+            <th>Truth Table</th>
+            </tr>
+            <tr>
+            <td>AND</td>
+            <td><img src="../../../assets/and.png"></td>
+            <td><img src="../../../assets/and-truth.png"></td>
+            </tr>
+            <tr>
+            <td>OR</td>
+            <td><img src="../../../assets/or.png"></td>
+            <td><img src="../../../assets/or-truth.png"></td>
+            </tr>
+            <tr>
+            <td>NOT</td>
+            <td><img src="../../../assets/not.png"></td>
+            <td><img src="../../../assets/not-truth.png"></td>
+            </tr>
+            <tr>
+            <td>XOR</td>
+            <td><img src="../../../assets/xor.png"></td>
+            <td><img src="../../../assets/xor-truth.png"></td>
+            </tr>
+            <tr>
+            <td>NAND</td>
+            <td><img src="../../../assets/nand.png"></td>
+            <td><img src="../../../assets/nand-truth.png"></td>
+            </tr>
+          </table>
+        </p>
+        <p>
+        Looking at the truth tables, lets dissect each gate. <br><br>
+        <b>AND - </b> Outputs 1 when A & B are 1<br><br>
+        <b>OR - </b> Outputs 1 when A or B is 1, along with A & B being 1<br><br>
+        <b>NOT - </b> Outputs the opposite of A<br><br>
+        <b>XOR - </b> Same as the OR gate, but excludes when A & B is 1<br><br>
+        <b>NAND - </b> Stands for N(OT)AND. The opposite of AND's logic.<br><br>
+        </p>
+        <p>
+        The key takeaway is the concept of a <b>universal</b> gate.<br><br>
+        <b>NAND</b> is a universal gate, in layman's terms, any other logic gate can be made of just <b>NAND</b> gates. <br><br>
+        For more information on gate-universality, visit <a href="https://www.allaboutcircuits.com/textbook/digital/chpt-3/gate-universality/">here</a>
+        </p>
+        </span>
+        <span id="function-types">
+        <h3>Function Types</h3>
+        On this site, you will hear the term "constant" and "balanced" function.
+        <p>A constant function is a function that returns the same output no matter the input</p>
+        <p>\( f(0) = 0 \quad \quad f(x) = x \)</p>
+        <p>\( f(1) = 0 \quad \quad f(y) = x \)</p>
+        or
+        <p>\( f(0) = 1 \quad \quad f(x) = y \)</p>
+        <p>\( f(1) = 1 \quad \quad f(y) = y \)</p>
+        so
+        <p>\( f(0) = f(1) \)</p>
+        <br>
+        <p>A balanced function is a function that returns different outputs given different inputs</p>
+        <p>\( f(0) = 0 \quad \quad f(x) = x \)</p>
+        <p>\( f(1) = 1 \quad \quad f(y) = y \)</p>
+        or
+        <p>\( f(0) = 1 \quad \quad f(x) = y \)</p>
+        <p>\( f(1) = 0 \quad \quad f(y) = x \)</p>
+        so
+        <p>\( f(0) \ne f(1) \)</p>
+        Another note for balanced functions, outputs are equal in quantity. <br>
+        If you get five 1's, you will also get five 0's. 
+        </span>
+        <span id="mathematics">
+        <h3>Mathematics</h3>
+        While the mathematics in quantum computation looks complicated, it's all quite elementary when you look closer. <br><br>
+        <b>Linear algebra</b>
+        To gain the basic understanding of linear algebra enough to compute these algorithms, we will cover some basic matrix operations. <br><br>
+        We will introduce vectors and matrices, let's take a look at a vector \( x \) <br><br>
+        \[
+        x = 
+        \begin{pmatrix}
+        1 & 2 & 3
+        \end{pmatrix}  
+        \]
+        and a vector \( y \)
+        \[
+        y = 
+        \begin{pmatrix}
+        4 \\
+        5 \\
+        6
+        \end{pmatrix}  
+        \]
+        The vector \( x \) is what we refer to as a <b>row vector</b>, while \( y \) is a <b>column vector</b> <br><br>
+        Adding and subtracting two vectors looks as so,
+        \[
+        x = 
+        \begin{pmatrix}
+        x_1 & x_2 & x_3
+        \end{pmatrix}, \quad 
+        z = 
+        \begin{pmatrix}
+        z_1 & z_2 & z_3
+        \end{pmatrix}  
+        \]
+        \[
+        x+z =         
+        \begin{pmatrix}
+        x_1+z_1 & x_2+z_2 & x_3+z_3
+        \end{pmatrix} 
+        \]
+        Let's do an example,
+        \[
+        x = 
+        \begin{pmatrix}
+        1 & 2 & 3
+        \end{pmatrix}, \quad 
+        z = 
+        \begin{pmatrix}
+        6 & 7 & 8
+        \end{pmatrix}  
+        \]
+        \[
+        x+z =         
+        \begin{pmatrix}
+        1+6 & 2+7 & 3+8
+        \end{pmatrix} 
+        \longrightarrow
+        \begin{pmatrix}
+        7 & 9 & 11
+        \end{pmatrix} 
+        \]
+        Simple enough, and it is the same for column vectors,
+        \[
+        x = 
+        \begin{pmatrix}
+        x_1 \\
+        x_2 \\
+        x_3
+        \end{pmatrix}, \quad 
+        y = 
+        \begin{pmatrix}
+        y_1 \\
+        y_2 \\
+        y_3
+        \end{pmatrix}  
+        \]
+        \[
+        x+y=
+        \begin{pmatrix}
+        x_1 + y_1 \\
+        x_2 + y_2 \\
+        x_3 + y_3
+        \end{pmatrix} 
+        \]
+        And the same applies for subtraction, but instead you subtract.. <br><br>
+        Multiplication next, let's note a few things, <br><br>
+        &emsp; 1. Vectors have a dimension of a x b, where a is the height, and b is the width, looking at our original \( x \) and \( y \) vectors, <br><br>
+        &emsp; &emsp; We see that \( x \) is a 1x3 matrix, and \( y \) is a 3x1 as shown in red<br>
+        <img src="../../../assets/vector-size-isolate.png"> <br><br>
+        &emsp; 2. Matrices are just bigger vectors (basically) <br><br>
+        &emsp; &emsp; A matrix 3x3 matrix B would look as expected <br><br>
+        \[
+        B = 
+        \begin{pmatrix}
+        b_1 & b_2 & b_3 \\
+        b_4 & b_5 & b_6 \\
+        b_7 & b_8 & b_9
+        \end{pmatrix}  
+        \]
+        Now, let's look at multiplication, we will refer to both matrices and vectors as matrices from now on.<br><br>
+        To multiply matrices, we need to make sure that the inner dimensions match, and the output will be the outer dimensions of the two matrices, what does this mean?<br><br>
+        Given a 1x<a id="success">3</a> and <a id="success">3</a>x1, matrix, these work, and will output a 1x1 matrix, or, just a number. This works because the inner terms match. Same with 3x<a id="success">1</a> and <a id="success">1</a>x3, which will output a 3x3 matrix.<br><br>
+        If you were to try and multiply a 3x<a id="fail">3</a> by a <a id="fail">2</a>x2 matrix, this would not work, as the inner terms are 3 and 2, and don't match. <br><br>
+        Let's look at an example of a 3x2 and 2x3 matrix, which will output a 3x3 matrix
+        \[
+        A = 
+        \begin{pmatrix}
+        a_1 & a_2 \\
+        a_3 & a_4 \\
+        a_5 & a_6
+        \end{pmatrix}
+        \quad \quad  
+        B = 
+        \begin{pmatrix}
+        b_1 & b_2 & b_3 \\
+        b_4 & b_5 & b_6
+        \end{pmatrix} 
+        \]
+        \[
+        AB = 
+        \begin{pmatrix}
+        (a_1 \cdot b_1 + a_2 \cdot b_4) & (a_1 \cdot b_2 + a_2 \cdot b_5) & (a_1 \cdot b_3 + a_2 \cdot b_6) \\
+        (a_3 \cdot b_1 + a_4 \cdot b_4) & (a_3 \cdot b_2 + a_4 \cdot b_5) & (a_3 \cdot b_3 + a_4 \cdot b_6) \\
+        (a_5 \cdot b_1 + a_6 \cdot b_4) & (a_5 \cdot b_2 + a_6 \cdot b_5) & (a_5 \cdot b_3 + a_6 \cdot b_6) 
+        \end{pmatrix} 
+        \]
+        Notice the pattern, <br><br>
+        <img src="../../../assets/matrix-multiplication-pattern.png"> <br><br>
+        Now let's see the same but with some real numbers,
+        \[
+        A = 
+        \begin{pmatrix}
+        1 & 2 \\
+        3 & 4 \\
+        5 & 6
+        \end{pmatrix}
+        \quad \quad  
+        B = 
+        \begin{pmatrix}
+        1 & 2 & 3 \\
+        4 & 5 & 6
+        \end{pmatrix}  
+        \]
+        \[
+        AB = 
+        \begin{pmatrix}
+        (1 \cdot 1 + 2 \cdot 4) & (1 \cdot 2 + 2 \cdot 5) & (1 \cdot 3 + 2 \cdot 6) \\
+        (3 \cdot 1 + 4 \cdot 4) & (3 \cdot 2 + 4 \cdot 5) & (3 \cdot 3 + 4 \cdot 6) \\
+        (5 \cdot 1 + 6 \cdot 4) & (5 \cdot 2 + 6 \cdot 5) & (5 \cdot 3 + 6 \cdot 6) 
+        \end{pmatrix} 
+        \longrightarrow
+        \]
+        \[
+        AB = 
+        \begin{pmatrix}
+        (1 + 8) & (2 + 10) & (3 + 12) \\
+        (3 + 16) & (6 + 20) & (9 + 24) \\
+        (5 + 24) & (10 + 30) & (15 + 36) 
+        \end{pmatrix} 
+        \longrightarrow
+        \]
+        \[
+        AB = 
+        \begin{pmatrix}
+        9 & 12 & 15 \\
+        19 & 26 & 33 \\
+        29 & 40 & 51 
+        \end{pmatrix} 
+        \]
+        <br><br><b>Other concepts</b><br><br>
+        Dotting denotes multiplying and adding each term of vectors, let's look at an example
+        \[
+        v = 
+        \begin{pmatrix}
+        1 & 2 & 3
+        \end{pmatrix} \quad  
+        u = 
+        \begin{pmatrix}
+        4 & 5 & 6
+        \end{pmatrix} 
+        \] 
+        \[
+        v \cdot u =
+        (1 \cdot 4) + (2 \cdot 5) + (3 \cdot 6) 
+        \longrightarrow
+        \]
+        \[
+        4 + 10 + 18
+        \longrightarrow
+        32
+        \]
+        Another thing you will see is an equation like this
+        \[
+        \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} \ket{x}
+        \]
+        Let's break this down, <br><br>
+        <img src="../../../assets/summation-diagram.png"> <br><br>
+        This overall is representing the superposition of all possible n-qubit states <br><br>
+        To be clear, <b><i>x is all possible bit strings of length n</i></b> means we are considering all possible bit strings of length n, representing each bit string as x
+        \[
+        n = 2
+        \]
+        \[
+        x = \{00, 01, 10, 11\}
+        \]
+        \[
+        n = 3
+        \]
+        \[
+        x = \{000, 001, 010, 011, 100, 101, 110, 111\}
+        \]
+        </span>
+        <span id="notation">
+        <h3>Notation</h3>
+        The largest takeaway from notation will be <b>Dirac notation</b>.<br><br>
+        Dirac notation, also known as bra-ket notation is a way to represent vectors. <br><br>
+        \[
+        \braket{bra|ket}
+        \]
+        Bra's \( \langle\Psi_b| \) represent row vectors, while Ket's \( |\Psi_k\rangle \) represent column vectors.<br>
+        \[
+        \langle\Psi_b| = 
+        \begin{pmatrix}
+        y_1 & y_2 & y_3
+        \end{pmatrix}  
+        \]
+        \[
+        |\Psi_k\rangle = 
+        \begin{pmatrix}
+        x_1 \\
+        x_2 \\
+        x_3
+        \end{pmatrix}   
+        \]
+        The *'s represent that we need to take the complex conjugate when converting from a row to column vector. <br><br>
+        To give you an idea of how these Bra-ket's work, let us look at these two vectors
+        \[
+        |\Psi_1\rangle = 
+        \begin{pmatrix}
+        a \\
+        b \\
+        c
+        \end{pmatrix}  
+        \quad
+        and
+        \quad
+        |\Psi_2\rangle = 
+        \begin{pmatrix}
+        x \\
+        y \\
+        z
+        \end{pmatrix}  
+        \]
+        So, if we want to find \( \langle\Psi_1| \Psi_2 \rangle \), remember that \( \langle\Psi_1| \) and \( |\Psi_2\rangle \) are equal to 
+        \[
+        \langle\Psi_1|= 
+        a^* 
+        \begin{pmatrix}
+        1 &
+        0 &
+        0
+        \end{pmatrix} 
+        + 
+        b^*
+        \begin{pmatrix}
+        0 &
+        1 &
+        0
+        \end{pmatrix}
+        +
+        c^*
+        \begin{pmatrix}
+        0 &
+        0 &
+        1
+        \end{pmatrix}
+        \]
+        and
+        \[
+        |\Psi_2\rangle = 
+        x 
+        \begin{pmatrix}
+        1 \\
+        0 \\
+        0
+        \end{pmatrix}  
+        + y 
+        \begin{pmatrix}
+        0 \\
+        1 \\
+        0
+        \end{pmatrix}
+        + z 
+        \begin{pmatrix}
+        0 \\
+        0 \\
+        1
+        \end{pmatrix}
+        \] <br><br>
+        If we were to represent these vectors as \( \langle\Psi_1| \Psi_2 \rangle \), you would get
+        \[
+        \langle\Psi_1| \Psi_2 \rangle = xa^* + yb^* + xc^* = 1
+        \]
+        It is important to note that those values add up to a probability. So, their sum is always equal to 1. <br><br>
+        Before we continue, lets take a look at some common examples of dirac notation you'll see frequently<br><br>
+        \( 
+        \ket{0} =          
+        \begin{pmatrix}
+        1 \\
+        0
+        \end{pmatrix} 
+        \) <br><br>
+        \( 
+        \ket{1} =  
+        \begin{pmatrix}
+        0 \\
+        1
+        \end{pmatrix} 
+        \) <br><br>
+        This will be the most common example you see. <br><br>
+        Working with \( \ket{0} \) and \( \ket{1} \), you can remember which vectors these represent as thinking of the number inside of the ket as the position where the 1 is located in the vector.<br><br>
+        That's a mouthful, but notice the 1 is in the "0" spot in \( \ket{0} \) and the "1" spot in \( \ket{1} \). <b>(remember this is zero-indexed, intuitive for computer scientists, but for others, counting starts with 0. So the "0" spot is the first spot in the vector)</b><br><br>
+        Next,<br><br>
+        \(
+        \ket{+} =
+        \frac{|\ket{0} + \ket{1}|}{\sqrt{2}}
+        \)
+        <br>
+        \(
+        \ket{-} =
+        \frac{|\ket{0} - \ket{1}|}{\sqrt{2}}
+        \)
+        <br><br>
+        These represent our superposition states of \( \ket{0} \) and \( \ket{1} \), we'll get to superposition later.<br><br>
+        Now that you have an idea of our standard dirac notation states, let's take a look at an example where we express a vector in dirac notation <br><br>
+        Given the vector
+        \[
+        |\Psi_1\rangle = 
+        \begin{pmatrix}
+        a \\
+        b
+        \end{pmatrix} 
+        =
+        a 
+        \begin{pmatrix}
+        1 \\
+        0
+        \end{pmatrix} 
+        +
+        b
+        \begin{pmatrix}
+        0 \\
+        1
+        \end{pmatrix} 
+        \]
+        Notice that our vectors can be represented as \( \ket{0} \) and \( \ket{1} \)
+        \[
+        |\Psi_1\rangle = 
+        \begin{pmatrix}
+        a \\
+        b
+        \end{pmatrix} 
+        =
+        a \ket{0}
+        +
+        b \ket{1}
+        \]
+        Now we can look at representing multiple qubit states using Bra-Ket notation. <br><br>
+        Let's say we wanted to represent a state where the first qubit is 0, the next qubit is 1, and 1 again, and finally, another 0. We can represent this by
+        \[
+        \ket{0110}
+        \]
+        Notice this is different than
+        \[
+        \ket{0} \ket{1} \ket{1} \ket{0}
+        \]
+        In the second example, we are representing these bits arbitrarily. <br><br>
+        \( \ket{0110} \) is representing that we pass these bits sequentially.
+        </span>
+        <span id="quantum-computation">
+        <h3>Quantum Computation</h3>
+        Quantum computing spans much further than Computer Science. It largely based in physics and mathematics, which both utilize quantum mechanics. <br><br>
+        We are going to focus on quantum algorithms, we won't touch much on the physics side of quantum computation. But it is important to cover some fundamental components<br><br>
+        Below we can see some key concepts that are used in quantum computation that we will cover throughout our algorithms.
+        </span>
+        <span id="bits-and-qubits">
+        <h3>Bits and Qubits</h3>
+        As we've covered, bits are a binary representation of data, you have the options 0 and 1. <br><br>
+        Qubits are one in the same regrading binary. They too have the states 0 and 1, however, they also have a superposition state.
+        </span>
+        <span id="amplitude">
+        <h3>Amplitude</h3>
+        A probability amplitude is a complex number, in this case lets use \( x \). To get the probability of this, we perform 
+        \[
+        p = |x|^2
+        \]
+        We now can look at a system with two steps, \( s_1 \) and \( s_2 \). To get \( x \) we take the product<br>
+        <img src="../../../assets/probability-steps.png">
+        \[
+        x = s_1 s_2
+        \]
+        Similarly, a system with two options, \( o_1 \) and \( o_2 \). To get \( x \) we add these amplitudes <br><br>
+        <img src="../../../assets/probability-options.png">
+        \[
+        x = o_1 + o_2
+        \]
+        </span>
+        <span id="superposition">
+        <h3>Superposition</h3>
+        Superposition is the backbone of every quantum algorithm. <br><br>
+        This a term that describes how a system can be in a state of all of it's possible outcomes. <br><br>
+        Looking at the superposition of a qubit, most likely you've seen
+        \[
+        \frac{1}{\sqrt{2}} \ket{0} +
+        \frac{1}{\sqrt{2}} \ket{1} 
+        \]
+        This for example, states that our bit is in a superposition state where it is a 50/50 chance it will be measured as a 0 or 1. <br><br>
+        It is important to note that whatever system is in a superposition state, that state is lost upon measurement. To which you obtain either 0 or 1 at the given probabilities of the kets.
+        </span>
+        <span id="entanglement">
+        <h3>Entanglement</h3>
+        It is easiest to understand entanglement by a quick example. <br><br>
+        This explanation is derived from <a href="https://www.youtube.com/watch?v=rqmIVeheTVU">this</a> video <br><br>
+        If you were to give two people coins and have them flip them, they would have no connection, person A flipping heads would have no effect on person B flipping tails.
+        However, if you were to entangle these coins, person A flipping heads would let you know person B flipped tails <b>immediately</b>. <br><br>
+        The important part here is that it would happen immediately. Even if they were on other sides of the universe, they would know instantly. <br><br>
+        Although I pride myself on making sure everything on this website is mine, whether that be an interpretation, or an asset. Another amazing resource on entanglement is from my favorite theoretical physicist, Sabine Hossenfelder, who has an amazing video on this topic. <br><br>
+        Check out her explanation <a href="https://www.youtube.com/watch?v=j6Mw3_tOcNI&list=PLwgQsqtH9H5djIfFhXE6We207beTgUnyL&index=10">here</a> (skip to 3:30)
+        </span>
+        <span id="quantum-circuit-basics">
+        <h3>Quantum Circuits and Gates</h3>
+        To understand quantum circuits and gates, we can look at the <a href="../fourier/deutschs.html#deutsch-jozsa">Deutsch-Jozsa</a> circuit diagram and dissect it. <br>
+        <img src="../../../assets/deutsch-jozsa.png"><br>
+        Let's look at each component of this diagram.
+        <p>
+            <table>
+                <tr>
+                <th>Name</th>
+                <th>Item</th>
+                <th>Description</th>
+                </tr>
+                <tr>
+                <td>Hadamarad Gate</td>
+                <td><img src="../../../assets/hadamarad-isolate.png"></td>
+                <td>Puts a qubit into a superposition state</td>
+                </tr>
+                <tr>
+                <td>Hadamarad Gate of \( N \) amounts</td>
+                <td><img src="../../../assets/hadamarad-n-isolate.png"></td>
+                <td>Puts n amounts of qubits into superposition states</td>
+                </tr>
+                <tr>
+                <td>Line (Qubit)</td>
+                <td><img src="../../../assets/line-qubit.png"></td>
+                <td>The qubit that we perform an operation on</td>
+                </tr>
+                <tr>
+                <td>Line of N amounts (Qubits)</td>
+                <td><img src="../../../assets/line-n-qubit.png"></td>
+                <td>The qubits that we perform operations on</td>
+                </tr>
+                <tr>
+                <td>Measurement</td>
+                <td><img src="../../../assets/measurement.png"></td>
+                <td>Making our qubit converge to 0 or 1 to give our final output value</td>
+                </tr>
+                <tr>
+                <td>Quantum Oracle</td>
+                <td><img src="../../../assets/quantum-oracle-usubf.png"></td>
+                <td>Find more information on this topic <a href="../other-qunatum/quantum-circuits/quantum-oracle.html"> here</a></td>
+                </tr>
+              </table>
+            </p>
+        </span>
+        <span id="quantum-supremacy">
+        <h3>Quantum Supremacy</h3>
+        <p>
+        Deutsch-Jozsa's algorithm was the first to prove quantum supremacy, the idea that quantum computers can solve problems faster than classical algorithms. <br><br>
+        With quantum phenomena such as entanglement and superposition, quantum algorithms can solve a problem with just a singular operation. This same problem would take \( x \) queries on a classical computer. <br><br>
+        This concept is what we consider quantum supremacy, we now know that quantum computers can indeed perform operations at a rate not possible by any classical computer.
+        </p>
+        <br><br>
+        </span>
+        <h2>Supplementary Concepts</h2>
+        <br>
+        <span id="quantum-oracle">
+          <h2>Quantum Oracle</h2>
+          <p>
+            The quantum oracle is a key part of almost every quantum algorithm. <br><br>
+            Simply, the quantum oracle is a black box function, meaning you literally cannot see inside of it. Which also means, you don't know what it does. <br><br>
+            Similarly to how all classical algorithms are made up of boolean functions, quantum algorithms are made with matrix multiplications. So "oracles" are just small circuits that give us more power in our algorithms. <br><br>
+            These oracles are unitary and reversible, however, you don't really need to know the in's and out's of these oracles, they're black box, so just remember you put in bits, and they give you bits back.
+            \[
+            f \{0,1\}^n 
+            \longrightarrow
+            f \{0,1\}^m
+            \]
+            The oracle, which we will denote at \( U_f \) will act on \( \ket{x} \) and \( \ket{y} \) as follows
+            \[
+            U_f \ket{x} \ket{y} = \ket{x} \ket{y \oplus f(x)}
+            \]
+            Before we move on, think of a boolean logic gate like AND as a certain matrix of 0's and 1's that replicate the action upon applying it to a vector.
+          </p>
+        </span>
+        <span id="phase-oracle"></span>
+        <h2>Phase Oracle</h2>
+          <p>
+            The phase oracle is the same concept as a quantum oracle, except we conditionally apply it whether \( x=1 \) or \( x=0 \) <br><br>
+            Formally, we represent this as 
+            \[
+            U_f \ket{+} = (-1)^{f(x)}\ket{+}
+            \]
+            We apply this state if x is 1, and vise versa. You can see the phase oracle take effect in <a href="../fourier/deutschs.html#deutsch-jozsa">Deutsch-Jozsa's</a> algorithm.
+          </p>
+          <br><br><br><br>
+          [<a href="../index.html">\( \leftarrow \) back to home</a>]
+          <br><br><br><br>
+        </body>
+</html>

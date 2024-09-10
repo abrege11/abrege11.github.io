@@ -1,0 +1,48 @@
+#mainHeader {
+    display: inline;
+}
+
+.mainHeaderName {
+    display: inline;
+    font-size: 1.5vh;
+}
+
+a {
+    text-decoration: none;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+    text-align: left !important;
+    margin-left: 5vh !important;
+    z-index: 0;
+  }
+
+button {
+    background: none;
+    color: blue;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+.grid-item {
+    text-align: center;
+}
+
+.grid-item img {
+    max-width: 100%;
+    height: auto;
+}
+
+#small {
+    font-size: small;
+}
