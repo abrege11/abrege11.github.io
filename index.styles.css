@@ -7,6 +7,11 @@ img {
     height: auto;
 }
 
+#sportsGraph {
+    max-width: 85%;
+    height: auto;
+}
+
 #icon {
     max-width: 15%;
     height: auto;
