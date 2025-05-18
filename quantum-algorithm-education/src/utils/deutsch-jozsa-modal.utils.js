@@ -47,13 +47,13 @@ const jozsaQuantumCircuitDiv = {
                 <th>Description</th>
                 </tr>
                 <tr>
-                <td>Hadamarad Gate</td>
-                <td><img src="../../../assets/hadamarad-isolate.png"></td>
+                <td>hadamard Gate</td>
+                <td><img src="../../../assets/hadamard-isolate.png"></td>
                 <td>Puts a qubit into a superposition state</td>
                 </tr>
                 <tr>
-                <td>Hadamarad Gate of \( N \) amounts</td>
-                <td><img src="../../../assets/hadamarad-n-isolate.png"></td>
+                <td>hadamard Gate of \( N \) amounts</td>
+                <td><img src="../../../assets/hadamard-n-isolate.png"></td>
                 <td>Puts n amounts of qubits into superposition states</td>
                 </tr>
                 <tr>
@@ -94,8 +94,8 @@ const jozsaSymbolsDiv = {
                 <th>Description</th>
                 </tr>
                 <tr>
-                <td>Hadamarad Gate of \( N \) amounts</td>
-                <td><img src="../../../assets/hadamarad-n-isolate.png"></td>
+                <td>hadamard Gate of \( N \) amounts</td>
+                <td><img src="../../../assets/hadamard-n-isolate.png"></td>
                 <td>Puts n amounts of qubits into superposition states</td>
                 </tr>
                 <tr>
@@ -114,15 +114,15 @@ const jozsaSymbolsDiv = {
 };
 
 const jozsaHadamardDiv = {
-    fetchName: "jozsa-hadamarad",
+    fetchName: "jozsa-hadamard",
     bodyContent: 
     String.raw`
-        <h3>Hadamarad Gate</h3>
+        <h3>hadamard Gate</h3>
         <p>
-        The Hadamarad gate takes in a qubit, and returns the qubit in it's superposition state.
+        The hadamard gate takes in a qubit, and returns the qubit in it's superposition state.
         </p>
         <p>
-        These are denoted by <br><img src="../../../assets/hadamarad-isolate.png">
+        These are denoted by <br><img src="../../../assets/hadamard-isolate.png">
         </p>
     `+ `<br><br>`
 };

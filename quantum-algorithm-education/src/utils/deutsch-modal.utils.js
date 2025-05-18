@@ -79,8 +79,8 @@ const quantumCircuitDiv = {
                 <th>Description</th>
                 </tr>
                 <tr>
-                <td>Hadamarad Gate</td>
-                <td><img src="../../../assets/hadamarad-isolate.png"></td>
+                <td>hadamard Gate</td>
+                <td><img src="../../../assets/hadamard-isolate.png"></td>
                 <td>Puts a qubit into a superposition state</td>
                 </tr>
                 <tr>
@@ -156,16 +156,16 @@ const multiKetDiv = {
     `+ `<br><br>`
 };
 
-const hadamaradDiv = {
-    fetchName: "hadamarad",
+const hadamardDiv = {
+    fetchName: "hadamard",
     bodyContent: 
     String.raw`
-        <h3>Hadamarad Gate</h3>
+        <h3>hadamard Gate</h3>
         <p>
-        The Hadamarad gate takes in a qubit, and returns the qubit in it's superposition state.
+        The hadamard gate takes in a qubit, and returns the qubit in it's superposition state.
         </p>
         <p>
-        These are denoted by <br><img src="../../../assets/hadamarad-isolate.png">
+        These are denoted by <br><img src="../../../assets/hadamard-isolate.png">
         </p>
     `+ `<br><br>`
 };
@@ -286,7 +286,7 @@ const quantumComputationDiv = {
 //     `+ `<br><br>`
 // };
 
-const buttonObjList = [constantDiv, balancedDiv, classicalAlgorithmDiv, quantumAlgorithmDiv, quantumCircuitDiv, ketsDiv, multiKetDiv, hadamaradDiv, superpositionDiv, plusMinusKetDiv, quantumOracleDiv, phaseOracleDiv, quantumSupremacyDiv, classicalComputationDiv, quantumComputationDiv];
+const buttonObjList = [constantDiv, balancedDiv, classicalAlgorithmDiv, quantumAlgorithmDiv, quantumCircuitDiv, ketsDiv, multiKetDiv, hadamardDiv, superpositionDiv, plusMinusKetDiv, quantumOracleDiv, phaseOracleDiv, quantumSupremacyDiv, classicalComputationDiv, quantumComputationDiv];
 
 function addStyles (stylePrefix) {
     var style = document.createElement('style');

@@ -1,3 +1,8 @@
+body {
+    background-color: #F0F0D7;
+    color: #3f5a36;
+    font-family: "Georgia"
+}
 a {
     text-decoration: none;
 }

@@ -46,7 +46,7 @@
         </p>
         <p>
         \( |\Psi_1\rangle \): <br>&emsp; Our ket at this time is <button id="multi-ket-open">\(|01\rangle\)</button>.
-        Both \(|0\rangle\) and \(|1\rangle\) are being sent into \(H\) (<button id="hadamarad-open">Hadamarad</button>) gates. Hadamarad
+        Both \(|0\rangle\) and \(|1\rangle\) are being sent into \(H\) (<button id="hadamard-open">hadamard</button>) gates. hadamard
         gates put the given qubit into a superposition state.
         </p>
         <p>
@@ -227,7 +227,7 @@
         \[ \ket{0}^{\otimes n} \]
         \[ /^n \]
         \[ H^{\otimes n} \]
-        Referring to \( n \) amounts of \( \ket{0} \)'s, qubits (represented by lines), and <button id="jozsa-hadamarad-open">\( H \) gates</button>, respectively.
+        Referring to \( n \) amounts of \( \ket{0} \)'s, qubits (represented by lines), and <button id="jozsa-hadamard-open">\( H \) gates</button>, respectively.
         </p>
         <p>
         \( |\Psi_1\rangle \): <br>&emsp;
@@ -308,7 +308,7 @@
         \longrightarrow
         \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} (-1)^{f(x)} H^{\otimes n} \ket{x}
         \] &emsp;
-        Now we can look back at our Hadamarad transform for \( \ket{+}^{\otimes n}  \) and apply \( (-1)^{f(x)} \)
+        Now we can look back at our hadamard transform for \( \ket{+}^{\otimes n}  \) and apply \( (-1)^{f(x)} \)
         \[
         \ket{+}^{\otimes n} 
         \longrightarrow
